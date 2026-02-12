@@ -57,7 +57,7 @@
       <div class="hero-content">
         <div class="hero-badge">Open Source &middot; MIT Licensed</div>
         <h1>The persistence and retrieval layer your AI pipeline is <span class="gradient-text">missing</span>.</h1>
-        <p class="hero-sub">Stop reinventing the storage layer for every AI project. RecallDB is an opinionated persistence schema on top of pgvector that stores embeddings alongside rich metadata, labels, tags, and raw content &mdash; all behind a single REST API.</p>
+        <p class="hero-sub">Your AI pipeline deserves a purpose-built persistence layer. RecallDB is an opinionated schema on top of pgvector that stores embeddings alongside rich metadata, labels, tags, and raw content &mdash; all behind a single REST API.</p>
         <div class="hero-actions">
           <a href="#quickstart" class="btn btn-primary">Get Started</a>
           <a href="https://github.com/jchristn/RecallDB" target="_blank" class="btn btn-secondary">
@@ -127,7 +127,7 @@
     <div class="container">
       <div class="section-header">
         <span class="section-tag">The Problem</span>
-        <h2>You've built this before.<br>It wasn't fun.</h2>
+        <h2>You've built this before.<br>You shouldn't have to again.</h2>
       </div>
       <div class="problem-grid">
         <div class="problem-card">
@@ -135,28 +135,28 @@
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
           </div>
           <h3>Bolt pgvector onto Postgres</h3>
-          <p>Install extensions, write migration scripts, design a schema that probably won't survive your next project.</p>
+          <p>Install extensions, write migration scripts, design a schema &mdash; all before you can store your first embedding.</p>
         </div>
         <div class="problem-card">
           <div class="problem-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
           </div>
           <h3>Hand-roll a chunking schema</h3>
-          <p>Documents, chunks, positions, metadata tables. Every team does it differently. None are reusable.</p>
+          <p>Documents, chunks, positions, metadata tables. Every team builds their own, and it's hard to carry forward to the next project.</p>
         </div>
         <div class="problem-card">
           <div class="problem-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           </div>
           <h3>Build an API layer with auth</h3>
-          <p>REST endpoints, bearer tokens, multi-tenant isolation, RBAC. Weeks of work before you store a single embedding.</p>
+          <p>REST endpoints, bearer tokens, multi-tenant isolation, RBAC. Important work, but it's undifferentiated infrastructure for your team.</p>
         </div>
         <div class="problem-card">
           <div class="problem-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           </div>
-          <h3>End up with a fragile bespoke system</h3>
-          <p>Six weeks later you have something that works for one project. Next project? Start over.</p>
+          <h3>Maintain it all yourself</h3>
+          <p>The result works, but it's tightly coupled to one project &mdash; and the next project needs something slightly different.</p>
         </div>
       </div>
       <div class="problem-answer">
@@ -170,7 +170,7 @@
       <div class="section-header">
         <span class="section-tag">Beyond Embeddings</span>
         <h2>Store the complete context your AI needs.</h2>
-        <p class="section-sub">Most vector databases store embeddings and call it a day. RecallDB stores everything your retrieval pipeline needs to find, rank, and act on information.</p>
+        <p class="section-sub">Most vector databases focus on embeddings alone. RecallDB stores everything your retrieval pipeline needs to find, rank, and act on information.</p>
       </div>
       <div class="features-grid">
         <div class="feature-card">
@@ -796,8 +796,8 @@ results = client.search(<span class="t-string">"ten_default"</span>, <span class
   <section class="section section-cta">
     <div class="container">
       <div class="cta-content">
-        <h2>Stop reinventing persistence and retrieval.</h2>
-        <p>RecallDB gives you the complete persistence and retrieval architecture your AI pipeline needs &mdash; so you can focus on building the features that matter.</p>
+        <h2>Spend your time on what makes your product unique.</h2>
+        <p>RecallDB gives you a complete persistence and retrieval architecture out of the box &mdash; so you can focus on building the features that matter.</p>
         <div class="cta-actions">
           <a href="https://github.com/jchristn/RecallDB" target="_blank" class="btn btn-primary btn-lg">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>

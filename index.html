@@ -160,7 +160,6 @@
         </div>
       </div>
       <div class="problem-answer">
-        <p><strong>RecallDB is the architecture you'd build if you had the time to do it right.</strong></p>
       </div>
     </div>
   </section>
@@ -226,7 +225,7 @@
       <div class="section-header">
         <span class="section-tag">Architecture</span>
         <h2>Built on Postgres. Powered by pgvector.</h2>
-        <p class="section-sub">No exotic infrastructure. No proprietary lock-in. Just Postgres with the pgvector extension, wrapped in an opinionated schema and a clean REST API.</p>
+        <p class="section-sub">No exotic infrastructure. No proprietary lock-in. Just Postgres with the pgvector extension, wrapped in an opinionated schema and a clean REST API. Access your database directly at any time.</p>
       </div>
       <div class="arch-diagram">
         <div class="arch-row">
@@ -261,7 +260,7 @@
       <div class="arch-details">
         <div class="arch-detail">
           <h4>Per-Collection Isolation</h4>
-          <p>Each collection creates its own Postgres tables with a dedicated HNSW vector index (<code>m=16</code>, <code>ef_construction=64</code>). Labels and tags are stored in separate relational tables, keeping the vector index lean.</p>
+          <p>Each collection creates its own Postgres tables with a dedicated HNSW vector index. Labels and tags are stored in separate relational tables, keeping the vector index lean.</p>
         </div>
         <div class="arch-detail">
           <h4>Multi-Tenant by Design</h4>
@@ -308,7 +307,7 @@
     ]
   },
   <span class="t-key">"Terms"</span>: {
-    <span class="t-key">"Required"</span>: [<span class="t-string">"machine learning"</span>],
+    <span class="t-key">"Required"</span>: [<span class="t-string">"machine"</span>,<span class="t-string">"learning"</span>],
     <span class="t-key">"Excluded"</span>: [<span class="t-string">"deprecated"</span>]
   },
   <span class="t-key">"CreatedAfter"</span>: <span class="t-string">"2025-01-01T00:00:00Z"</span>,
@@ -779,6 +778,10 @@ results = client.search(<span class="t-string">"ten_default"</span>, <span class
           <div class="cred-item">
             <span class="cred-label">Bearer Token</span>
             <code>default</code>
+          </div>
+          <div class="cred-item">
+            <span class="cred-label">Server</span>
+            <code>http://localhost:8600</code>
           </div>
           <div class="cred-item">
             <span class="cred-label">Dashboard</span>

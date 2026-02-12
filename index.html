@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RecallDB - AI-Ready Data Persistence and Retrieval on pgvector</title>
+  <meta name="description" content="RecallDB is an opinionated data persistence and retrieval layer on top of pgvector. Store embeddings, metadata, labels, tags, and raw content behind a single API. Power your AI pipelines with intelligent multi-modal retrieval.">
+  <meta name="keywords" content="vector database, pgvector, embeddings, AI, semantic search, multi-tenant, data persistence, retrieval, multi-modal search">
+  <meta property="og:title" content="RecallDB - AI-Ready Data Persistence and Retrieval">
+  <meta property="og:description" content="The persistence and retrieval layer your AI pipeline is missing. Store embeddings alongside rich metadata with intelligent multi-modal retrieval.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://recalldb.ai">
+  <meta property="og:image" content="https://recalldb.ai/assets/logo-black.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="RecallDB - AI-Ready Data Persistence and Retrieval">
+  <meta name="twitter:description" content="The persistence and retrieval layer your AI pipeline is missing.">
+  <link rel="icon" type="image/x-icon" href="assets/icon-black.ico">
+  <link rel="icon" type="image/png" href="assets/icon-black.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <img src="assets/logo-black.png" alt="RecallDB" class="nav-logo-img" id="nav-logo-light">
+        <img src="assets/logo-white.png" alt="RecallDB" class="nav-logo-img hidden" id="nav-logo-dark">
+      </a>
+      <div class="nav-links" id="nav-links">
+        <a href="#why">Why RecallDB</a>
+        <a href="#features">Features</a>
+        <a href="#search">Search</a>
+        <a href="#use-cases">Use Cases</a>
+        <a href="#sdks">SDKs</a>
+        <a href="#quickstart">Quick Start</a>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <svg class="theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="theme-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <a href="https://github.com/jchristn/RecallDB" target="_blank" class="nav-github">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          GitHub
+        </a>
+      </div>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">Open Source &middot; MIT Licensed</div>
+        <h1>The persistence and retrieval layer your AI pipeline is <span class="gradient-text">missing</span>.</h1>
+        <p class="hero-sub">Stop reinventing the storage layer for every AI project. RecallDB is an opinionated persistence schema on top of pgvector that stores embeddings alongside rich metadata, labels, tags, and raw content &mdash; all behind a single REST API.</p>
+        <div class="hero-actions">
+          <a href="#quickstart" class="btn btn-primary">Get Started</a>
+          <a href="https://github.com/jchristn/RecallDB" target="_blank" class="btn btn-secondary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            View on GitHub
+          </a>
+        </div>
+        <div class="hero-terminal">
+          <div class="terminal-bar">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">terminal</span>
+          </div>
+          <pre class="terminal-body"><code><span class="t-prompt">$</span> docker compose up
+<span class="t-comment"># API at localhost:8600, Dashboard at localhost:8601</span>
+
+<span class="t-prompt">$</span> curl -X PUT http://localhost:8600/v1.0/tenants/ten_default/collections/col_default/documents \
+  -H <span class="t-string">"Authorization: Bearer recalldbadmin"</span> \
+  -d <span class="t-string">'{
+    "DocumentId": "readme-guide",
+    "ContentType": "Text",
+    "Content": "RecallDB stores embeddings alongside rich metadata.",
+    "Embeddings": [0.1, 0.2, 0.3],
+    "Labels": ["documentation", "guide"],
+    "Tags": [{"Key": "source", "Value": "readme"}]
+  }'</span></code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Logos / Trust bar -->
+  <section class="trust-bar">
+    <div class="container">
+      <div class="trust-items">
+        <div class="trust-item">
+          <span class="trust-number">40+</span>
+          <span class="trust-label">REST Endpoints</span>
+        </div>
+        <div class="trust-divider"></div>
+        <div class="trust-item">
+          <span class="trust-number">5</span>
+          <span class="trust-label">Distance Metrics</span>
+        </div>
+        <div class="trust-divider"></div>
+        <div class="trust-item">
+          <span class="trust-number">3</span>
+          <span class="trust-label">SDKs</span>
+        </div>
+        <div class="trust-divider"></div>
+        <div class="trust-item">
+          <span class="trust-number">10</span>
+          <span class="trust-label">Filter Operators</span>
+        </div>
+        <div class="trust-divider"></div>
+        <div class="trust-item">
+          <span class="trust-number">9</span>
+          <span class="trust-label">Content Types</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Problem -->
+  <section class="section section-problem" id="why">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">The Problem</span>
+        <h2>You've built this before.<br>It wasn't fun.</h2>
+      </div>
+      <div class="problem-grid">
+        <div class="problem-card">
+          <div class="problem-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <h3>Bolt pgvector onto Postgres</h3>
+          <p>Install extensions, write migration scripts, design a schema that probably won't survive your next project.</p>
+        </div>
+        <div class="problem-card">
+          <div class="problem-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <h3>Hand-roll a chunking schema</h3>
+          <p>Documents, chunks, positions, metadata tables. Every team does it differently. None are reusable.</p>
+        </div>
+        <div class="problem-card">
+          <div class="problem-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3>Build an API layer with auth</h3>
+          <p>REST endpoints, bearer tokens, multi-tenant isolation, RBAC. Weeks of work before you store a single embedding.</p>
+        </div>
+        <div class="problem-card">
+          <div class="problem-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <h3>End up with a fragile bespoke system</h3>
+          <p>Six weeks later you have something that works for one project. Next project? Start over.</p>
+        </div>
+      </div>
+      <div class="problem-answer">
+        <p><strong>RecallDB is the architecture you'd build if you had the time to do it right.</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- What You Store -->
+  <section class="section section-alt" id="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Beyond Embeddings</span>
+        <h2>Store the complete context your AI needs.</h2>
+        <p class="section-sub">Most vector databases store embeddings and call it a day. RecallDB stores everything your retrieval pipeline needs to find, rank, and act on information.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon purple">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          </div>
+          <h3>Vector Embeddings</h3>
+          <p>Semantic similarity search via pgvector with dedicated HNSW indexing per collection. No noisy-neighbor problems.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon blue">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <h3>Raw Content</h3>
+          <p>Full text, code, tables, lists, hyperlinks, binary data, images. Your content lives right next to its embeddings.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon teal">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          </div>
+          <h3>9 Content Types</h3>
+          <p>Text, HTML, JSON, XML, CSV, SQL, code, table, and binary. Your retrieval pipeline knows <em>what</em> it's looking at.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon orange">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          </div>
+          <h3>Chunk Positions</h3>
+          <p>Ordered document segments with <code>document_id</code> + <code>position</code> grouping. Reconstruct full documents or navigate by chunk.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon pink">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          </div>
+          <h3>Multi-Modal Search</h3>
+          <p>Query across content, metadata (labels and key-value tags with 10 operators), and vector embeddings &mdash; all in a single compound request.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon green">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+          </div>
+          <h3>SHA256 Hashes &amp; ETags</h3>
+          <p>Deduplication, cache invalidation, and change detection out of the box. No extra plumbing required.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Architecture</span>
+        <h2>Built on Postgres. Powered by pgvector.</h2>
+        <p class="section-sub">No exotic infrastructure. No proprietary lock-in. Just Postgres with the pgvector extension, wrapped in an opinionated schema and a clean REST API.</p>
+      </div>
+      <div class="arch-diagram">
+        <div class="arch-row">
+          <div class="arch-box arch-app">
+            <div class="arch-box-label">Your Application</div>
+            <div class="arch-box-sub">C# / Python / JavaScript SDK</div>
+          </div>
+        </div>
+        <div class="arch-arrow">
+          <svg width="24" height="40" viewBox="0 0 24 40"><path d="M12 0 L12 32 M6 26 L12 34 L18 26" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </div>
+        <div class="arch-row">
+          <div class="arch-box arch-api">
+            <div class="arch-box-label">RecallDB API Server</div>
+            <div class="arch-box-sub">40+ REST endpoints &middot; Auth &middot; Multi-tenant</div>
+          </div>
+          <div class="arch-box arch-dash">
+            <div class="arch-box-label">React Dashboard</div>
+            <div class="arch-box-sub">Visual management &middot; Query builder</div>
+          </div>
+        </div>
+        <div class="arch-arrow">
+          <svg width="24" height="40" viewBox="0 0 24 40"><path d="M12 0 L12 32 M6 26 L12 34 L18 26" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </div>
+        <div class="arch-row">
+          <div class="arch-box arch-db">
+            <div class="arch-box-label">PostgreSQL + pgvector</div>
+            <div class="arch-box-sub">Per-collection tables &middot; HNSW indexes &middot; Labels &middot; Tags</div>
+          </div>
+        </div>
+      </div>
+      <div class="arch-details">
+        <div class="arch-detail">
+          <h4>Per-Collection Isolation</h4>
+          <p>Each collection creates its own Postgres tables with a dedicated HNSW vector index (<code>m=16</code>, <code>ef_construction=64</code>). Labels and tags are stored in separate relational tables, keeping the vector index lean.</p>
+        </div>
+        <div class="arch-detail">
+          <h4>Multi-Tenant by Design</h4>
+          <p>Tenants, users, credentials, and collections are fully scoped. One deployment serves many clients with complete data isolation between tenants.</p>
+        </div>
+        <div class="arch-detail">
+          <h4>Bring Your Own Embeddings</h4>
+          <p>No vendor lock-in. Use OpenAI, Cohere, Ollama, Voyage, or anything that outputs a float array. RecallDB stores and indexes them all the same.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Search -->
+  <section class="section section-alt" id="search">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Compound Search</span>
+        <h2>Go beyond nearest-neighbor.</h2>
+        <p class="section-sub">Combine vector similarity, label filters, tag conditions, content term matching, and date ranges in a single query.</p>
+      </div>
+      <div class="search-demo">
+        <div class="search-code">
+          <div class="terminal-bar">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">search_query.json</span>
+          </div>
+          <pre class="terminal-body"><code>{
+  <span class="t-key">"SortOrder"</span>: <span class="t-string">"ScoreDescending"</span>,
+  <span class="t-key">"Vector"</span>: {
+    <span class="t-key">"SearchType"</span>: <span class="t-string">"CosineSimilarity"</span>,
+    <span class="t-key">"Embeddings"</span>: [<span class="t-num">0.1</span>, <span class="t-num">0.2</span>, <span class="t-num">0.3</span>],
+    <span class="t-key">"MinimumScore"</span>: <span class="t-num">0.7</span>
+  },
+  <span class="t-key">"LabelFilter"</span>: {
+    <span class="t-key">"Required"</span>: [<span class="t-string">"important"</span>],
+    <span class="t-key">"Excluded"</span>: [<span class="t-string">"draft"</span>]
+  },
+  <span class="t-key">"TagFilter"</span>: {
+    <span class="t-key">"Required"</span>: [
+      { <span class="t-key">"Key"</span>: <span class="t-string">"department"</span>, <span class="t-key">"Condition"</span>: <span class="t-string">"Equals"</span>, <span class="t-key">"Value"</span>: <span class="t-string">"engineering"</span> }
+    ]
+  },
+  <span class="t-key">"Terms"</span>: {
+    <span class="t-key">"Required"</span>: [<span class="t-string">"machine learning"</span>],
+    <span class="t-key">"Excluded"</span>: [<span class="t-string">"deprecated"</span>]
+  },
+  <span class="t-key">"CreatedAfter"</span>: <span class="t-string">"2025-01-01T00:00:00Z"</span>,
+  <span class="t-key">"MaxResults"</span>: <span class="t-num">10</span>
+}</code></pre>
+        </div>
+        <div class="search-capabilities">
+          <div class="search-cap">
+            <div class="search-cap-icon purple">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            </div>
+            <div>
+              <h4>Vector Search</h4>
+              <p>5 metrics: cosine similarity, cosine distance, Euclidean similarity, Euclidean distance, inner product. Set score or distance thresholds.</p>
+            </div>
+          </div>
+          <div class="search-cap">
+            <div class="search-cap-icon blue">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+            </div>
+            <div>
+              <h4>Label Filters</h4>
+              <p>Require or exclude categorical labels with boolean AND/AND-NOT logic for precisely scoped retrieval.</p>
+            </div>
+          </div>
+          <div class="search-cap">
+            <div class="search-cap-icon teal">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div>
+              <h4>Tag Conditions</h4>
+              <p>10 operators: Equals, NotEquals, GreaterThan, LessThan, Contains, ContainsNot, StartsWith, EndsWith, IsNull, IsNotNull.</p>
+            </div>
+          </div>
+          <div class="search-cap">
+            <div class="search-cap-icon orange">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            <div>
+              <h4>Term Matching</h4>
+              <p>Case-insensitive substring matching on content. Require terms, exclude terms, or both. Combine with vector search.</p>
+            </div>
+          </div>
+          <div class="search-cap">
+            <div class="search-cap-icon pink">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div>
+              <h4>Date Ranges &amp; Pagination</h4>
+              <p>Temporal scoping with CreatedBefore/CreatedAfter. MaxResults up to 1000 with continuation tokens.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use Cases -->
+  <section class="section" id="use-cases">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Use Cases</span>
+        <h2>Art of the Possible with RecallDB.</h2>
+      </div>
+      <div class="usecases-grid">
+        <div class="usecase-card">
+          <div class="usecase-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <h3>Conversational AI &amp; Chatbots</h3>
+          <p>Store conversation history, knowledge base articles, and FAQ embeddings. Retrieve contextually relevant answers with compound filters on topic labels and recency.</p>
+        </div>
+        <div class="usecase-card">
+          <div class="usecase-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <h3>Document Intelligence</h3>
+          <p>Chunk PDFs, contracts, and reports with position tracking. Search across thousands of documents with label-scoped vector queries and tag-based metadata filters.</p>
+        </div>
+        <div class="usecase-card">
+          <div class="usecase-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <h3>Conversational Memory</h3>
+          <p>Persist chat history with per-session labels and user metadata tags. Retrieve relevant past exchanges with vector similarity and temporal filters for context-aware responses.</p>
+        </div>
+        <div class="usecase-card">
+          <div class="usecase-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+          </div>
+          <h3>Multi-Modal Content</h3>
+          <p>Store image embeddings, audio transcripts, and video descriptions alongside their raw content. Typed content categories let your pipeline handle each format correctly.</p>
+        </div>
+        <div class="usecase-card">
+          <div class="usecase-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3>Multi-Tenant SaaS</h3>
+          <p>Build AI-powered features for your SaaS product. Each customer gets fully isolated tenants with their own collections, users, and credentials. One deployment, many clients.</p>
+        </div>
+        <div class="usecase-card">
+          <div class="usecase-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <h3>Enterprise Knowledge Bases</h3>
+          <p>Centralize organizational knowledge with rich metadata. Filter by department, access level, document type, and date range while leveraging semantic search.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What You Get -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Platform</span>
+        <h2>Everything you need. Nothing you don't.</h2>
+      </div>
+      <div class="benefits-grid">
+        <div class="benefit-item">
+          <div class="benefit-check">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div>
+            <h4>Multi-tenant isolation</h4>
+            <p>Tenants, users, credentials, and collections are fully scoped.</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-check">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div>
+            <h4>Per-collection HNSW indexes</h4>
+            <p>Dedicated vector indexes with no noisy-neighbor problems.</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-check">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div>
+            <h4>5 distance metrics</h4>
+            <p>Cosine, Euclidean, inner product &mdash; similarity and distance variants.</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-check">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div>
+            <h4>Compound search queries</h4>
+            <p>Vector + labels + tags + terms + dates in one request.</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-check">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div>
+            <h4>Bring your own embeddings</h4>
+            <p>OpenAI, Cohere, Ollama, or any float array. No vendor lock-in.</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-check">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div>
+            <h4>Batch document operations</h4>
+            <p>Bulk ingest documents in a single API call for high-throughput pipelines.</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-check">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div>
+            <h4>React dashboard</h4>
+            <p>Manage tenants, collections, and documents visually. Search with a query builder.</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-check">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div>
+            <h4>Docker Compose deployment</h4>
+            <p>Postgres + pgvector, API server, and dashboard in one command.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SDKs -->
+  <section class="section" id="sdks">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">SDKs</span>
+        <h2>Drop into your stack in minutes.</h2>
+        <p class="section-sub">Typed clients for C#, Python, and JavaScript. Full CRUD and search operations with zero boilerplate.</p>
+      </div>
+      <div class="sdk-tabs">
+        <button class="sdk-tab active" data-lang="csharp">C#</button>
+        <button class="sdk-tab" data-lang="python">Python</button>
+        <button class="sdk-tab" data-lang="javascript">JavaScript</button>
+        <button class="sdk-tab" data-lang="rest">REST</button>
+      </div>
+      <div class="sdk-panels">
+        <div class="sdk-panel active" id="panel-csharp">
+          <div class="terminal-bar">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">Program.cs</span>
+          </div>
+          <pre class="terminal-body"><code><span class="t-keyword">using</span> RecallDb.Sdk;
+<span class="t-keyword">using</span> RecallDb.Sdk.Models;
+
+<span class="t-keyword">var</span> client = <span class="t-keyword">new</span> <span class="t-type">RecallDbClient</span>(<span class="t-string">"http://localhost:8600"</span>, <span class="t-string">"recalldbadmin"</span>);
+
+<span class="t-comment">// Store a document with embeddings and metadata</span>
+<span class="t-keyword">await</span> client.CreateDocumentAsync(<span class="t-string">"ten_default"</span>, <span class="t-string">"col_default"</span>, <span class="t-keyword">new</span> <span class="t-type">DocumentRecord</span>
+{
+    DocumentId = <span class="t-string">"readme-guide"</span>,
+    ContentType = <span class="t-string">"Text"</span>,
+    Content = <span class="t-string">"RecallDB stores embeddings alongside rich metadata."</span>,
+    Embeddings = <span class="t-keyword">new</span> <span class="t-type">List</span>&lt;<span class="t-type">float</span>&gt; { <span class="t-num">0.1f</span>, <span class="t-num">0.2f</span>, <span class="t-num">0.3f</span> },
+    Labels = <span class="t-keyword">new</span> <span class="t-type">List</span>&lt;<span class="t-type">string</span>&gt; { <span class="t-string">"documentation"</span>, <span class="t-string">"guide"</span> }
+});
+
+<span class="t-comment">// Search with compound filters</span>
+<span class="t-type">SearchResult</span> results = <span class="t-keyword">await</span> client.SearchAsync(<span class="t-string">"ten_default"</span>, <span class="t-string">"col_default"</span>, <span class="t-keyword">new</span> <span class="t-type">SearchQuery</span>
+{
+    Vector = <span class="t-keyword">new</span> <span class="t-type">VectorQuery</span>
+    {
+        SearchType = <span class="t-string">"CosineSimilarity"</span>,
+        Embeddings = <span class="t-keyword">new</span> <span class="t-type">List</span>&lt;<span class="t-type">float</span>&gt; { <span class="t-num">0.1f</span>, <span class="t-num">0.2f</span>, <span class="t-num">0.3f</span> },
+        MinimumScore = <span class="t-num">0.7</span>
+    },
+    MaxResults = <span class="t-num">10</span>
+});</code></pre>
+        </div>
+        <div class="sdk-panel" id="panel-python">
+          <div class="terminal-bar">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">main.py</span>
+          </div>
+          <pre class="terminal-body"><code><span class="t-keyword">from</span> recalldb_sdk <span class="t-keyword">import</span> RecallDbClient
+
+client = <span class="t-type">RecallDbClient</span>(<span class="t-string">"http://localhost:8600"</span>, <span class="t-string">"recalldbadmin"</span>)
+
+<span class="t-comment"># Store a document with embeddings and metadata</span>
+client.create_document(<span class="t-string">"ten_default"</span>, <span class="t-string">"col_default"</span>, {
+    <span class="t-string">"DocumentId"</span>: <span class="t-string">"readme-guide"</span>,
+    <span class="t-string">"ContentType"</span>: <span class="t-string">"Text"</span>,
+    <span class="t-string">"Content"</span>: <span class="t-string">"RecallDB stores embeddings alongside rich metadata."</span>,
+    <span class="t-string">"Embeddings"</span>: [<span class="t-num">0.1</span>, <span class="t-num">0.2</span>, <span class="t-num">0.3</span>],
+    <span class="t-string">"Labels"</span>: [<span class="t-string">"documentation"</span>, <span class="t-string">"guide"</span>]
+})
+
+<span class="t-comment"># Search with compound filters</span>
+results = client.search(<span class="t-string">"ten_default"</span>, <span class="t-string">"col_default"</span>, {
+    <span class="t-string">"Vector"</span>: {
+        <span class="t-string">"SearchType"</span>: <span class="t-string">"CosineSimilarity"</span>,
+        <span class="t-string">"Embeddings"</span>: [<span class="t-num">0.1</span>, <span class="t-num">0.2</span>, <span class="t-num">0.3</span>],
+        <span class="t-string">"MinimumScore"</span>: <span class="t-num">0.7</span>
+    },
+    <span class="t-string">"MaxResults"</span>: <span class="t-num">10</span>
+})</code></pre>
+        </div>
+        <div class="sdk-panel" id="panel-javascript">
+          <div class="terminal-bar">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">index.js</span>
+          </div>
+          <pre class="terminal-body"><code><span class="t-keyword">const</span> { RecallDbClient } = <span class="t-keyword">require</span>(<span class="t-string">'recalldb-sdk'</span>);
+
+<span class="t-keyword">const</span> client = <span class="t-keyword">new</span> <span class="t-type">RecallDbClient</span>(<span class="t-string">'http://localhost:8600'</span>, <span class="t-string">'recalldbadmin'</span>);
+
+<span class="t-comment">// Store a document with embeddings and metadata</span>
+<span class="t-keyword">await</span> client.createDocument(<span class="t-string">'ten_default'</span>, <span class="t-string">'col_default'</span>, {
+  DocumentId: <span class="t-string">'readme-guide'</span>,
+  ContentType: <span class="t-string">'Text'</span>,
+  Content: <span class="t-string">'RecallDB stores embeddings alongside rich metadata.'</span>,
+  Embeddings: [<span class="t-num">0.1</span>, <span class="t-num">0.2</span>, <span class="t-num">0.3</span>],
+  Labels: [<span class="t-string">'documentation'</span>, <span class="t-string">'guide'</span>]
+});
+
+<span class="t-comment">// Search with compound filters</span>
+<span class="t-keyword">const</span> results = <span class="t-keyword">await</span> client.search(<span class="t-string">'ten_default'</span>, <span class="t-string">'col_default'</span>, {
+  Vector: {
+    SearchType: <span class="t-string">'CosineSimilarity'</span>,
+    Embeddings: [<span class="t-num">0.1</span>, <span class="t-num">0.2</span>, <span class="t-num">0.3</span>],
+    MinimumScore: <span class="t-num">0.7</span>,
+  },
+  MaxResults: <span class="t-num">10</span>,
+});</code></pre>
+        </div>
+        <div class="sdk-panel" id="panel-rest">
+          <div class="terminal-bar">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">terminal</span>
+          </div>
+          <pre class="terminal-body"><code><span class="t-prompt">$</span> curl -X POST http://localhost:8600/v1.0/tenants/ten_default/collections/col_default/search \
+  -H <span class="t-string">"Authorization: Bearer recalldbadmin"</span> \
+  -H <span class="t-string">"Content-Type: application/json"</span> \
+  -d <span class="t-string">'{
+    "Vector": {
+      "SearchType": "CosineSimilarity",
+      "Embeddings": [0.1, 0.2, 0.3],
+      "MinimumScore": 0.7
+    },
+    "LabelFilter": {
+      "Required": ["documentation"]
+    },
+    "Terms": {
+      "Required": ["metadata"]
+    },
+    "MaxResults": 10
+  }'</span></code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- API Surface -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">API</span>
+        <h2>40+ endpoints. Full CRUD. OpenAPI &amp; Swagger.</h2>
+        <p class="section-sub">A complete REST API covering every resource in the system. Bearer token authentication, admin and user scopes, and full OpenAPI/Swagger documentation out of the box.</p>
+      </div>
+      <div class="api-grid">
+        <div class="api-group">
+          <h4>Tenants</h4>
+          <div class="api-endpoints">
+            <div class="api-endpoint"><span class="method get">GET</span> /v1.0/tenants</div>
+            <div class="api-endpoint"><span class="method put">PUT</span> /v1.0/tenants</div>
+            <div class="api-endpoint"><span class="method get">GET</span> /v1.0/tenants/{id}</div>
+            <div class="api-endpoint"><span class="method delete">DEL</span> /v1.0/tenants/{id}</div>
+          </div>
+        </div>
+        <div class="api-group">
+          <h4>Collections</h4>
+          <div class="api-endpoints">
+            <div class="api-endpoint"><span class="method get">GET</span> /v1.0/.../collections</div>
+            <div class="api-endpoint"><span class="method put">PUT</span> /v1.0/.../collections</div>
+            <div class="api-endpoint"><span class="method get">GET</span> /v1.0/.../collections/{id}</div>
+            <div class="api-endpoint"><span class="method delete">DEL</span> /v1.0/.../collections/{id}</div>
+          </div>
+        </div>
+        <div class="api-group">
+          <h4>Documents</h4>
+          <div class="api-endpoints">
+            <div class="api-endpoint"><span class="method get">GET</span> /v1.0/.../documents</div>
+            <div class="api-endpoint"><span class="method put">PUT</span> /v1.0/.../documents</div>
+            <div class="api-endpoint"><span class="method post">POST</span> /v1.0/.../documents/batch</div>
+            <div class="api-endpoint"><span class="method delete">DEL</span> /v1.0/.../documents/{key}</div>
+          </div>
+        </div>
+        <div class="api-group">
+          <h4>Search</h4>
+          <div class="api-endpoints">
+            <div class="api-endpoint"><span class="method post">POST</span> /v1.0/.../search</div>
+            <div class="api-endpoint"><span class="method post">POST</span> /v1.0/.../enumerate</div>
+          </div>
+          <h4 style="margin-top: 1rem;">Users &amp; Credentials</h4>
+          <div class="api-endpoints">
+            <div class="api-endpoint"><span class="method get">GET</span> /v1.0/.../users</div>
+            <div class="api-endpoint"><span class="method put">PUT</span> /v1.0/.../credentials</div>
+          </div>
+        </div>
+      </div>
+      <div class="api-cta">
+        <a href="https://github.com/jchristn/RecallDB/blob/main/REST_API.md" target="_blank" class="btn btn-secondary">View Full API Reference</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Start -->
+  <section class="section" id="quickstart">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Quick Start</span>
+        <h2>Up and running in 60 seconds.</h2>
+      </div>
+      <div class="steps-grid">
+        <div class="step">
+          <div class="step-number-col">
+            <div class="step-number">1</div>
+            <div class="step-connector"></div>
+          </div>
+          <div class="step-content">
+            <h3>Clone &amp; Launch</h3>
+            <div class="step-code">
+              <pre><code><span class="t-prompt">$</span> git clone https://github.com/jchristn/RecallDB.git
+<span class="t-prompt">$</span> cd RecallDB/docker
+<span class="t-prompt">$</span> docker compose up</code></pre>
+            </div>
+            <p>Postgres + pgvector, the API server, and the React dashboard all come up together.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number-col">
+            <div class="step-number">2</div>
+            <div class="step-connector"></div>
+          </div>
+          <div class="step-content">
+            <h3>Store Documents</h3>
+            <div class="step-code">
+              <pre><code><span class="t-prompt">$</span> curl -X PUT \
+  localhost:8600/v1.0/.../documents \
+  -H <span class="t-string">"Authorization: Bearer recalldbadmin"</span> \
+  -d <span class="t-string">'{
+    "DocumentId": "doc1",
+    "ContentType": "Text",
+    "Content": "Hello world",
+    "Embeddings": [0.1, 0.2, 0.3]
+  }'</span></code></pre>
+            </div>
+            <p>A default tenant and collection are created on first boot. Start storing documents immediately.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number-col">
+            <div class="step-number">3</div>
+            <div class="step-connector"></div>
+          </div>
+          <div class="step-content">
+            <h3>Search</h3>
+            <div class="step-code">
+              <pre><code><span class="t-prompt">$</span> curl -X POST \
+  localhost:8600/v1.0/.../search \
+  -H <span class="t-string">"Authorization: Bearer recalldbadmin"</span> \
+  -d <span class="t-string">'{
+    "Vector": {
+      "SearchType": "CosineSimilarity",
+      "Embeddings": [0.1, 0.2, 0.3],
+      "MinimumScore": 0.5
+    },
+    "MaxResults": 10
+  }'</span></code></pre>
+            </div>
+            <p>Combine vector similarity, labels, tags, terms, and date filters in a single query.</p>
+          </div>
+        </div>
+      </div>
+      <div class="quickstart-creds">
+        <h4>Default Credentials</h4>
+        <div class="creds-grid">
+          <div class="cred-item">
+            <span class="cred-label">Admin API Key</span>
+            <code>recalldbadmin</code>
+          </div>
+          <div class="cred-item">
+            <span class="cred-label">User Login</span>
+            <code>admin@recall / password</code>
+          </div>
+          <div class="cred-item">
+            <span class="cred-label">Bearer Token</span>
+            <code>default</code>
+          </div>
+          <div class="cred-item">
+            <span class="cred-label">Dashboard</span>
+            <code>http://localhost:8601</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section section-cta">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Stop reinventing persistence and retrieval.</h2>
+        <p>RecallDB gives you the complete persistence and retrieval architecture your AI pipeline needs &mdash; so you can focus on building the features that matter.</p>
+        <div class="cta-actions">
+          <a href="https://github.com/jchristn/RecallDB" target="_blank" class="btn btn-primary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            Get Started on GitHub
+          </a>
+          <a href="https://github.com/jchristn/RecallDB/blob/main/REST_API.md" target="_blank" class="btn btn-secondary btn-lg">Read the Docs</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img src="assets/logo-white.png" alt="RecallDB" class="footer-logo">
+          <p>The persistence and retrieval layer your AI pipeline is missing.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <h4>Product</h4>
+            <a href="#features">Features</a>
+            <a href="#search">Search</a>
+            <a href="#use-cases">Use Cases</a>
+            <a href="#sdks">SDKs</a>
+            <a href="#quickstart">Quick Start</a>
+          </div>
+          <div class="footer-col">
+            <h4>Resources</h4>
+            <a href="https://github.com/jchristn/RecallDB/blob/main/REST_API.md" target="_blank">API Reference</a>
+            <a href="https://github.com/jchristn/RecallDB/blob/main/CHANGELOG.md" target="_blank">Changelog</a>
+            <a href="https://github.com/jchristn/RecallDB" target="_blank">GitHub</a>
+            <a href="https://github.com/jchristn/RecallDB/blob/main/LICENSE.md" target="_blank">MIT License</a>
+          </div>
+          <div class="footer-col">
+            <h4>Related</h4>
+            <a href="https://litegraphdb.com" target="_blank">LiteGraphDB</a>
+            <a href="https://partio.ai" target="_blank">Partio</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>MIT Licensed. Built with Postgres and pgvector.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

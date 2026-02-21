@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RecallDB - AI-Ready Data Persistence and Retrieval on pgvector</title>
   <meta name="description" content="RecallDB is an opinionated data persistence and retrieval layer on top of pgvector. Store embeddings, metadata, labels, tags, and raw content behind a single API. Power your AI pipelines with intelligent multi-modal retrieval.">
-  <meta name="keywords" content="vector database, pgvector, embeddings, AI, semantic search, multi-tenant, data persistence, retrieval, multi-modal search">
+  <meta name="keywords" content="vector database, pgvector, embeddings, AI, semantic search, full-text search, hybrid search, multi-tenant, data persistence, retrieval, multi-modal search">
   <meta property="og:title" content="RecallDB - AI-Ready Data Persistence and Retrieval">
   <meta property="og:description" content="The persistence and retrieval layer your AI pipeline is missing. Store embeddings alongside rich metadata with intelligent multi-modal retrieval.">
   <meta property="og:type" content="website">
@@ -117,6 +117,11 @@
         <div class="trust-item">
           <span class="trust-number">9</span>
           <span class="trust-label">Content Types</span>
+        </div>
+        <div class="trust-divider"></div>
+        <div class="trust-item">
+          <span class="trust-number">3</span>
+          <span class="trust-label">Search Modes</span>
         </div>
       </div>
     </div>
@@ -276,41 +281,87 @@
   <section class="section section-alt" id="search">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Compound Search</span>
-        <h2>Go beyond nearest-neighbor.</h2>
-        <p class="section-sub">Combine vector similarity, label filters, tag conditions, content term matching, and date ranges in a single query.</p>
+        <span class="section-tag">Search</span>
+        <h2>Three search modes. One endpoint.</h2>
+        <p class="section-sub">Vector similarity, full-text relevance, or hybrid &mdash; combine with labels, tags, terms, and date filters in a single query.</p>
       </div>
       <div class="search-demo">
         <div class="search-code">
-          <div class="terminal-bar">
-            <span class="terminal-dot red"></span>
-            <span class="terminal-dot yellow"></span>
-            <span class="terminal-dot green"></span>
-            <span class="terminal-title">search_query.json</span>
+          <div class="sdk-tabs" id="search-mode-tabs">
+            <button class="sdk-tab active" data-lang="search-vector">Vector</button>
+            <button class="sdk-tab" data-lang="search-fulltext">Full-Text</button>
+            <button class="sdk-tab" data-lang="search-hybrid">Hybrid</button>
           </div>
-          <pre class="terminal-body"><code>{
-  <span class="t-key">"SortOrder"</span>: <span class="t-string">"ScoreDescending"</span>,
+          <div class="sdk-panels" id="search-mode-panels">
+            <div class="sdk-panel active" id="panel-search-vector">
+              <div class="terminal-bar">
+                <span class="terminal-dot red"></span>
+                <span class="terminal-dot yellow"></span>
+                <span class="terminal-dot green"></span>
+                <span class="terminal-title">vector_search.json</span>
+              </div>
+              <pre class="terminal-body"><code><span class="t-comment">// Semantic similarity search using embeddings</span>
+{
   <span class="t-key">"Vector"</span>: {
     <span class="t-key">"SearchType"</span>: <span class="t-string">"CosineSimilarity"</span>,
-    <span class="t-key">"Embeddings"</span>: [<span class="t-num">0.1</span>, <span class="t-num">0.2</span>, <span class="t-num">0.3</span>],
+    <span class="t-key">"Embeddings"</span>: [<span class="t-num">0.1</span>, <span class="t-num">0.2</span>, <span class="t-num">0.3</span>, <span class="t-num">...</span>],
     <span class="t-key">"MinimumScore"</span>: <span class="t-num">0.7</span>
   },
   <span class="t-key">"LabelFilter"</span>: {
-    <span class="t-key">"Required"</span>: [<span class="t-string">"important"</span>],
-    <span class="t-key">"Excluded"</span>: [<span class="t-string">"draft"</span>]
+    <span class="t-key">"Required"</span>: [<span class="t-string">"important"</span>]
   },
-  <span class="t-key">"TagFilter"</span>: {
-    <span class="t-key">"Required"</span>: [
-      { <span class="t-key">"Key"</span>: <span class="t-string">"department"</span>, <span class="t-key">"Condition"</span>: <span class="t-string">"Equals"</span>, <span class="t-key">"Value"</span>: <span class="t-string">"engineering"</span> }
-    ]
-  },
-  <span class="t-key">"Terms"</span>: {
-    <span class="t-key">"Required"</span>: [<span class="t-string">"machine"</span>,<span class="t-string">"learning"</span>],
-    <span class="t-key">"Excluded"</span>: [<span class="t-string">"deprecated"</span>]
-  },
-  <span class="t-key">"CreatedAfter"</span>: <span class="t-string">"2025-01-01T00:00:00Z"</span>,
   <span class="t-key">"MaxResults"</span>: <span class="t-num">10</span>
-}</code></pre>
+}
+
+<span class="t-comment">// Score = vector similarity (0.0 - 1.0)</span>
+<span class="t-comment">// 5 metrics: cosine, euclidean, inner product</span></code></pre>
+            </div>
+            <div class="sdk-panel" id="panel-search-fulltext">
+              <div class="terminal-bar">
+                <span class="terminal-dot red"></span>
+                <span class="terminal-dot yellow"></span>
+                <span class="terminal-dot green"></span>
+                <span class="terminal-title">fulltext_search.json</span>
+              </div>
+              <pre class="terminal-body"><code><span class="t-comment">// Ranked text search with stemming &amp; stop words</span>
+{
+  <span class="t-key">"FullText"</span>: {
+    <span class="t-key">"Query"</span>: <span class="t-string">"OAuth2 PKCE configuration"</span>,
+    <span class="t-key">"SearchType"</span>: <span class="t-string">"TsRank"</span>,
+    <span class="t-key">"Language"</span>: <span class="t-string">"english"</span>,
+    <span class="t-key">"MinimumScore"</span>: <span class="t-num">0.01</span>
+  },
+  <span class="t-key">"SortOrder"</span>: <span class="t-string">"TextScoreDescending"</span>,
+  <span class="t-key">"MaxResults"</span>: <span class="t-num">10</span>
+}
+
+<span class="t-comment">// Score = ts_rank relevance (0.0 - 1.0)</span>
+<span class="t-comment">// No embeddings needed &mdash; pure lexical search</span></code></pre>
+            </div>
+            <div class="sdk-panel" id="panel-search-hybrid">
+              <div class="terminal-bar">
+                <span class="terminal-dot red"></span>
+                <span class="terminal-dot yellow"></span>
+                <span class="terminal-dot green"></span>
+                <span class="terminal-title">hybrid_search.json</span>
+              </div>
+              <pre class="terminal-body"><code><span class="t-comment">// Best of both: semantic + lexical in one query</span>
+{
+  <span class="t-key">"Vector"</span>: {
+    <span class="t-key">"SearchType"</span>: <span class="t-string">"CosineSimilarity"</span>,
+    <span class="t-key">"Embeddings"</span>: [<span class="t-num">0.1</span>, <span class="t-num">0.2</span>, <span class="t-num">0.3</span>, <span class="t-num">...</span>]
+  },
+  <span class="t-key">"FullText"</span>: {
+    <span class="t-key">"Query"</span>: <span class="t-string">"OAuth2 PKCE flow"</span>,
+    <span class="t-key">"TextWeight"</span>: <span class="t-num">0.3</span>
+  },
+  <span class="t-key">"MaxResults"</span>: <span class="t-num">10</span>
+}
+
+<span class="t-comment">// Score = 0.7 * vector + 0.3 * text</span>
+<span class="t-comment">// TextWeight controls the blend ratio</span></code></pre>
+            </div>
+          </div>
         </div>
         <div class="search-capabilities">
           <div class="search-cap">
@@ -323,12 +374,12 @@
             </div>
           </div>
           <div class="search-cap">
-            <div class="search-cap-icon blue">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+            <div class="search-cap-icon green">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
             </div>
             <div>
-              <h4>Label Filters</h4>
-              <p>Require or exclude categorical labels with boolean AND/AND-NOT logic for precisely scoped retrieval.</p>
+              <h4>Full-Text Search</h4>
+              <p>PostgreSQL ts_rank scoring with stemming, stop word removal, and language support. TsRank or TsRankCd (term proximity).</p>
             </div>
           </div>
           <div class="search-cap">
@@ -336,17 +387,17 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
             </div>
             <div>
-              <h4>Tag Conditions</h4>
-              <p>10 operators: Equals, NotEquals, GreaterThan, LessThan, Contains, ContainsNot, StartsWith, EndsWith, IsNull, IsNotNull.</p>
+              <h4>Hybrid Search</h4>
+              <p>Blend vector similarity and text relevance with configurable weighting. One query, both scoring models, unified results.</p>
             </div>
           </div>
           <div class="search-cap">
-            <div class="search-cap-icon orange">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <div class="search-cap-icon blue">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
             </div>
             <div>
-              <h4>Term Matching</h4>
-              <p>Case-insensitive substring matching on content. Require terms, exclude terms, or both. Combine with vector search.</p>
+              <h4>Labels, Tags &amp; Terms</h4>
+              <p>Boolean label filters, 10 tag operators, and case-insensitive substring matching. Combine with any search mode.</p>
             </div>
           </div>
           <div class="search-cap">
@@ -390,7 +441,7 @@
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           </div>
           <h3>Conversational Memory</h3>
-          <p>Persist chat history with per-session labels and user metadata tags. Retrieve relevant past exchanges with vector similarity and temporal filters for context-aware responses.</p>
+          <p>Persist chat history with per-session labels and user metadata tags. Retrieve relevant past exchanges with vector similarity, full-text relevance, or hybrid search and temporal filters for context-aware responses.</p>
         </div>
         <div class="usecase-card">
           <div class="usecase-icon">
@@ -411,7 +462,7 @@
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
           </div>
           <h3>Enterprise Knowledge Bases</h3>
-          <p>Centralize organizational knowledge with rich metadata. Filter by department, access level, document type, and date range while leveraging semantic search.</p>
+          <p>Centralize organizational knowledge with rich metadata. Filter by department, access level, document type, and date range while leveraging semantic, full-text, or hybrid search.</p>
         </div>
       </div>
     </div>
@@ -458,7 +509,7 @@
           </div>
           <div>
             <h4>Compound search queries</h4>
-            <p>Vector + labels + tags + terms + dates in one request.</p>
+            <p>Vector, full-text, and hybrid search + labels + tags + terms + dates in one request.</p>
           </div>
         </div>
         <div class="benefit-item">
@@ -510,13 +561,38 @@
         <p class="section-sub">Typed clients for C#, Python, and JavaScript. Full CRUD and search operations with zero boilerplate.</p>
       </div>
       <div class="sdk-tabs">
-        <button class="sdk-tab active" data-lang="csharp">C#</button>
+        <button class="sdk-tab active" data-lang="rest">REST</button>
+        <button class="sdk-tab" data-lang="csharp">C#</button>
         <button class="sdk-tab" data-lang="python">Python</button>
         <button class="sdk-tab" data-lang="javascript">JavaScript</button>
-        <button class="sdk-tab" data-lang="rest">REST</button>
       </div>
       <div class="sdk-panels">
-        <div class="sdk-panel active" id="panel-csharp">
+        <div class="sdk-panel active" id="panel-rest">
+          <div class="terminal-bar">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">terminal</span>
+          </div>
+          <pre class="terminal-body"><code><span class="t-prompt">$</span> curl -X POST http://localhost:8600/v1.0/tenants/ten_default/collections/col_default/search \
+  -H <span class="t-string">"Authorization: Bearer recalldbadmin"</span> \
+  -H <span class="t-string">"Content-Type: application/json"</span> \
+  -d <span class="t-string">'{
+    "Vector": {
+      "SearchType": "CosineSimilarity",
+      "Embeddings": [0.1, 0.2, 0.3],
+      "MinimumScore": 0.7
+    },
+    "LabelFilter": {
+      "Required": ["documentation"]
+    },
+    "Terms": {
+      "Required": ["metadata"]
+    },
+    "MaxResults": 10
+  }'</span></code></pre>
+        </div>
+        <div class="sdk-panel" id="panel-csharp">
           <div class="terminal-bar">
             <span class="terminal-dot red"></span>
             <span class="terminal-dot yellow"></span>
@@ -609,31 +685,6 @@ results = client.search(<span class="t-string">"ten_default"</span>, <span class
   },
   MaxResults: <span class="t-num">10</span>,
 });</code></pre>
-        </div>
-        <div class="sdk-panel" id="panel-rest">
-          <div class="terminal-bar">
-            <span class="terminal-dot red"></span>
-            <span class="terminal-dot yellow"></span>
-            <span class="terminal-dot green"></span>
-            <span class="terminal-title">terminal</span>
-          </div>
-          <pre class="terminal-body"><code><span class="t-prompt">$</span> curl -X POST http://localhost:8600/v1.0/tenants/ten_default/collections/col_default/search \
-  -H <span class="t-string">"Authorization: Bearer recalldbadmin"</span> \
-  -H <span class="t-string">"Content-Type: application/json"</span> \
-  -d <span class="t-string">'{
-    "Vector": {
-      "SearchType": "CosineSimilarity",
-      "Embeddings": [0.1, 0.2, 0.3],
-      "MinimumScore": 0.7
-    },
-    "LabelFilter": {
-      "Required": ["documentation"]
-    },
-    "Terms": {
-      "Required": ["metadata"]
-    },
-    "MaxResults": 10
-  }'</span></code></pre>
         </div>
       </div>
     </div>
@@ -758,7 +809,7 @@ results = client.search(<span class="t-string">"ten_default"</span>, <span class
     "MaxResults": 10
   }'</span></code></pre>
             </div>
-            <p>Combine vector similarity, labels, tags, terms, and date filters in a single query.</p>
+            <p>Combine vector similarity, full-text relevance, or hybrid search with labels, tags, terms, and date filters in a single query.</p>
           </div>
         </div>
       </div>

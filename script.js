@@ -3,6 +3,15 @@
 (function () {
   'use strict';
 
+  var html = document.documentElement;
+  var footerLogo = document.getElementById('footer-logo');
+
+  // --- Footer logo swaps with theme (footer background inverts in light mode) ---
+  function syncFooterLogo(theme) {
+    if (!footerLogo) return;
+    footerLogo.src = theme === 'light' ? 'assets/logo-black.png' : 'assets/logo-white.png';
+  }
+
   // --- Mobile Navigation Toggle ---
   var toggle = document.getElementById('nav-toggle');
   var navLinks = document.getElementById('nav-links');
@@ -11,8 +20,6 @@
     toggle.addEventListener('click', function () {
       navLinks.classList.toggle('open');
     });
-
-    // Close menu on link click
     navLinks.querySelectorAll('a').forEach(function (link) {
       link.addEventListener('click', function () {
         navLinks.classList.remove('open');
@@ -20,71 +27,59 @@
     });
   }
 
-  // --- Dark Mode Toggle ---
+  // --- Dark Mode Toggle (dark is the default) ---
   var themeToggle = document.getElementById('theme-toggle');
-  var html = document.documentElement;
 
-  // Check for saved preference, then OS preference
   function getPreferredTheme() {
     var saved = localStorage.getItem('recalldb-theme');
     if (saved) return saved;
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    return 'dark';
   }
 
   function setTheme(theme) {
     html.setAttribute('data-theme', theme);
     localStorage.setItem('recalldb-theme', theme);
+    syncFooterLogo(theme);
   }
 
-  // Apply on load
+  // Apply on load (inline script in <head> already set the attribute; this keeps state in sync)
   setTheme(getPreferredTheme());
-
-  // Listen for OS changes
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
-    if (!localStorage.getItem('recalldb-theme')) {
-      setTheme(e.matches ? 'dark' : 'light');
-    }
-  });
 
   if (themeToggle) {
     themeToggle.addEventListener('click', function () {
-      var current = html.getAttribute('data-theme') || 'light';
+      var current = html.getAttribute('data-theme') || 'dark';
       setTheme(current === 'dark' ? 'light' : 'dark');
     });
   }
 
   // --- Sticky Nav Scroll Effect ---
   var nav = document.getElementById('nav');
-  var lastScroll = 0;
-
   window.addEventListener('scroll', function () {
     var scrollY = window.scrollY || window.pageYOffset;
     if (nav) {
-      if (scrollY > 50) {
-        nav.classList.add('scrolled');
-      } else {
-        nav.classList.remove('scrolled');
-      }
+      if (scrollY > 40) { nav.classList.add('scrolled'); }
+      else { nav.classList.remove('scrolled'); }
     }
-    lastScroll = scrollY;
-  });
+  }, { passive: true });
 
-  // --- SDK Tab Switching ---
-  var tabs = document.querySelectorAll('.sdk-tab');
-  var panels = document.querySelectorAll('.sdk-panel');
+  // --- SDK / Search Tab Switching (scoped per tab group) ---
+  document.querySelectorAll('.sdk-tabs').forEach(function (tabGroup) {
+    var panelsWrap = tabGroup.nextElementSibling;
+    var groupTabs = tabGroup.querySelectorAll('.sdk-tab');
 
-  tabs.forEach(function (tab) {
-    tab.addEventListener('click', function () {
-      var lang = this.getAttribute('data-lang');
+    groupTabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        var lang = this.getAttribute('data-lang');
 
-      tabs.forEach(function (t) { t.classList.remove('active'); });
-      panels.forEach(function (p) { p.classList.remove('active'); });
+        groupTabs.forEach(function (t) { t.classList.remove('active'); });
+        if (panelsWrap) {
+          panelsWrap.querySelectorAll('.sdk-panel').forEach(function (p) { p.classList.remove('active'); });
+        }
 
-      this.classList.add('active');
-      var target = document.getElementById('panel-' + lang);
-      if (target) {
-        target.classList.add('active');
-      }
+        this.classList.add('active');
+        var target = document.getElementById('panel-' + lang);
+        if (target) { target.classList.add('active'); }
+      });
     });
   });
 
@@ -93,11 +88,10 @@
     anchor.addEventListener('click', function (e) {
       var targetId = this.getAttribute('href');
       if (targetId === '#') return;
-
       var target = document.querySelector(targetId);
       if (target) {
         e.preventDefault();
-        var navHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-height')) || 72;
+        var navHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-height')) || 68;
         var top = target.getBoundingClientRect().top + window.pageYOffset - navHeight - 16;
         window.scrollTo({ top: top, behavior: 'smooth' });
       }
@@ -105,11 +99,6 @@
   });
 
   // --- Scroll-triggered Fade-in Animation ---
-  var observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -40px 0px'
-  };
-
   var observer = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
       if (entry.isIntersecting) {
@@ -117,55 +106,14 @@
         observer.unobserve(entry.target);
       }
     });
-  }, observerOptions);
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-  // Observe elements for animation
-  var animateElements = document.querySelectorAll(
+  document.querySelectorAll(
     '.problem-card, .feature-card, .usecase-card, .benefit-item, .step, .search-cap, .arch-box, .api-group'
-  );
-
-  animateElements.forEach(function (el) {
+  ).forEach(function (el, i) {
     el.classList.add('fade-in');
+    el.style.transitionDelay = (Math.min(i % 6, 5) * 0.06) + 's';
     observer.observe(el);
   });
-
-  // Add CSS for fade-in animation
-  var style = document.createElement('style');
-  style.textContent = [
-    '.fade-in {',
-    '  opacity: 0;',
-    '  transform: translateY(20px);',
-    '  transition: opacity 0.5s ease, transform 0.5s ease;',
-    '}',
-    '.fade-in.visible {',
-    '  opacity: 1;',
-    '  transform: translateY(0);',
-    '}',
-    '.problem-card.fade-in:nth-child(2) { transition-delay: 0.1s; }',
-    '.problem-card.fade-in:nth-child(3) { transition-delay: 0.2s; }',
-    '.problem-card.fade-in:nth-child(4) { transition-delay: 0.3s; }',
-    '.feature-card.fade-in:nth-child(2) { transition-delay: 0.1s; }',
-    '.feature-card.fade-in:nth-child(3) { transition-delay: 0.15s; }',
-    '.feature-card.fade-in:nth-child(4) { transition-delay: 0.2s; }',
-    '.feature-card.fade-in:nth-child(5) { transition-delay: 0.25s; }',
-    '.feature-card.fade-in:nth-child(6) { transition-delay: 0.3s; }',
-    '.usecase-card.fade-in:nth-child(2) { transition-delay: 0.1s; }',
-    '.usecase-card.fade-in:nth-child(3) { transition-delay: 0.15s; }',
-    '.usecase-card.fade-in:nth-child(4) { transition-delay: 0.2s; }',
-    '.usecase-card.fade-in:nth-child(5) { transition-delay: 0.25s; }',
-    '.usecase-card.fade-in:nth-child(6) { transition-delay: 0.3s; }',
-    '.benefit-item.fade-in:nth-child(2) { transition-delay: 0.05s; }',
-    '.benefit-item.fade-in:nth-child(3) { transition-delay: 0.1s; }',
-    '.benefit-item.fade-in:nth-child(4) { transition-delay: 0.15s; }',
-    '.benefit-item.fade-in:nth-child(5) { transition-delay: 0.2s; }',
-    '.benefit-item.fade-in:nth-child(6) { transition-delay: 0.25s; }',
-    '.benefit-item.fade-in:nth-child(7) { transition-delay: 0.3s; }',
-    '.benefit-item.fade-in:nth-child(8) { transition-delay: 0.35s; }',
-    '.search-cap.fade-in:nth-child(2) { transition-delay: 0.1s; }',
-    '.search-cap.fade-in:nth-child(3) { transition-delay: 0.2s; }',
-    '.search-cap.fade-in:nth-child(4) { transition-delay: 0.3s; }',
-    '.search-cap.fade-in:nth-child(5) { transition-delay: 0.4s; }'
-  ].join('\n');
-  document.head.appendChild(style);
 
 })();

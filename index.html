@@ -260,7 +260,7 @@
         <div class="arch-row">
           <div class="arch-box arch-api">
             <div class="arch-box-label">RecallDB API Server</div>
-            <div class="arch-box-sub">50+ REST endpoints &middot; Auth &middot; Multi-tenant &middot; OpenAPI</div>
+            <div class="arch-box-sub">50+ REST endpoints &middot; MCP server &middot; Auth &middot; Multi-tenant &middot; OpenAPI</div>
           </div>
           <div class="arch-box arch-dash">
             <div class="arch-box-label">React Dashboard</div>
@@ -438,7 +438,7 @@
       <div class="section-header">
         <span class="section-tag">Platform</span>
         <h2>Not just storage &mdash; a system you can operate.</h2>
-        <p class="section-sub">RecallDB ships with the operational surface most vector stores leave to you: built-in request analytics, statistics, and self-documenting APIs.</p>
+        <p class="section-sub">RecallDB ships with the operational surface most vector stores leave to you: an in-process MCP server for agents, OpenTelemetry metrics and tracing, built-in request analytics, statistics, and self-documenting APIs.</p>
       </div>
       <div class="features-grid">
         <div class="feature-card">
@@ -482,6 +482,20 @@
           </div>
           <h3>Auth, SSL &amp; Multi-Tenant</h3>
           <p>Bearer-token auth with admin and user scopes, optional SSL, and hard isolation between tenants, users, credentials, and collections.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M4 17l6-6-6-6"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          </div>
+          <h3>In-Process MCP Server</h3>
+          <p>Drive the database from AI agents over the Model Context Protocol &mdash; the full REST surface exposed as 51 tools over Streamable HTTP, hosted inside the server with per-caller bearer auth. One command wires up Claude Code, Cursor, Gemini, Codex, and Mux.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <h3>Metrics &amp; Distributed Tracing</h3>
+          <p>OpenTelemetry instrumentation across every HTTP, MCP, application, search, and storage path. Metrics scrape into Prometheus and traces export to Tempo, with a pre-provisioned Grafana + Loki stack that comes up with <code>docker compose</code>.</p>
         </div>
       </div>
     </div>
@@ -579,7 +593,15 @@
         </div>
         <div class="benefit-item">
           <div class="benefit-check"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-          <div><h4>Docker Compose deployment</h4><p>Postgres + pgvector, API server, and dashboard in one command.</p></div>
+          <div><h4>In-process MCP server</h4><p>Drive the database from AI agents &mdash; 51 tools, no separate service.</p></div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-check"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div><h4>Metrics &amp; distributed tracing</h4><p>OpenTelemetry across every path, exported to Prometheus, Tempo, Loki, and Grafana.</p></div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-check"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div><h4>Docker Compose deployment</h4><p>Postgres + pgvector, API server, dashboard, and observability stack in one command.</p></div>
         </div>
       </div>
     </div>
@@ -795,7 +817,7 @@ results = client.search(<span class="t-string">"default"</span>, <span class="t-
 <span class="t-prompt">$</span> cd RecallDB/docker
 <span class="t-prompt">$</span> docker compose up</code></pre>
             </div>
-            <p>Postgres + pgvector, the API server, and the React dashboard all come up together.</p>
+            <p>Postgres + pgvector, the API server, the React dashboard, and the Prometheus + Tempo + Loki + Grafana observability stack all come up together.</p>
           </div>
         </div>
         <div class="step">
